@@ -86,7 +86,7 @@
 #
 #>  define_pythonpath
 ####################################
-parent		ubana
+parent		ubana	v08_00_00_82
 defaultqual	e20
 ####################################
 

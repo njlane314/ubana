@@ -1,0 +1,123 @@
+ubana
+=====
+
+Copyright (C) ubana contributors.
+
+This file is part of the ubana source tree.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.  See the file LICENSE for the
+terms governing the source tree as a whole.
+
+
+Introduction
+============
+
+This checkout is a trimmed MicroBooNE ubana development tree prepared
+to build the searchingforstrangeness package with minimal local source
+overhead.
+
+It is not the full historical ubana analysis collection.  Most legacy
+ubana packages have been removed from the working tree, and the local
+build now enters only the searchingforstrangeness package.
+
+
+Directory layout
+================
+
+The important top-level entries are:
+
+  CMakeLists.txt
+       Top-level cetmodules build configuration.
+
+  Modules/
+       Local CMake helper modules required by the build.
+
+  test/
+       Small test harness for installed FHiCL files.
+
+  ups/
+       UPS product metadata.
+
+  ubana/
+       Package subtree entered by the top-level build.
+
+  ubana/searchingforstrangeness
+       Git submodule pointing to the searchingforstrangeness repository.
+
+
+Obtaining the submodule
+=======================
+
+After cloning ubana, initialize the searchingforstrangeness submodule:
+
+     git submodule update --init --recursive
+
+If the submodule has already been initialized and you want the latest
+recorded contents from the superproject:
+
+     git submodule update --init --recursive --remote
+
+
+Prerequisites
+=============
+
+You need the usual MicroBooNE MRB/LArSoft development environment,
+including:
+
+  * access to the MicroBooNE software container;
+  * access to CVMFS and the standard MicroBooNE products;
+  * an MRB development area;
+  * the usual command-line tools such as mrb and lar.
+
+This repository does not provide those dependencies itself.
+
+
+Building
+========
+
+From an MRB development area, check out this repository under
+srcs/ubana, initialize the submodule, and build in the normal ubana
+environment.
+
+Typical workflow:
+
+     cd srcs/ubana
+     git submodule update --init --recursive
+     cd $MRB_TOP
+     mrbsetenv
+     mrb i -j4
+
+The top-level build is configured to compile only:
+
+     ubana/searchingforstrangeness
+
+so local build time should be much lower than in a full ubana checkout.
+
+
+Further information
+===================
+
+Package-specific installation and runtime notes live in the
+searchingforstrangeness submodule:
+
+  * ubana/searchingforstrangeness/INSTALL
+  * ubana/searchingforstrangeness/README
+  * ubana/searchingforstrangeness/USAGE
+
+
+Reporting problems
+==================
+
+If the build fails, first verify:
+
+  * the submodule is initialized;
+  * the required MicroBooNE products are set up;
+  * the checkout is being built inside the expected MRB/LArSoft
+    environment.
+
+If the problem is specific to the analysis package, inspect the
+searchingforstrangeness repository history and configuration first,
+since that package now contains nearly all analysis-specific code in
+this tree.

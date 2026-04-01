@@ -1,0 +1,4 @@
+[submodule "ubana/searchingforstrangeness"]
+	path = ubana/searchingforstrangeness
+	url = https://github.com/njlane314/searchingforstrangeness.git
+	branch = main

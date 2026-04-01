@@ -1,9 +1,0 @@
-cet_make_library(
-  SOURCE
-  AnodeCathodePMAlg.cxx
-  LIBRARIES
-  PUBLIC
-  lardataalg::DetectorInfo
-  larcorealg::Geometry
-  fhiclcpp::fhiclcpp
-)

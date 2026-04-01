@@ -1,3 +1,0 @@
-#include "run_combinedrecotree_run3_overlay.fcl"
-
-services.SpaceCharge.EfieldOffsetScale: 1.0

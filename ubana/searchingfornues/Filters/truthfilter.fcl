@@ -1,8 +1,0 @@
-truthfilter: {
-    module_type: "TruthFilter"
-    CCNC: true
-    FiducialVolume: true
-    NeutralCurrent: false
-    ChargedCurrent: true
-    Npi0: 0
-    }

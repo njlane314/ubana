@@ -1,4 +1,0 @@
-add_subdirectory(HsnFinder)
-add_subdirectory(McTruthInformation)
-add_subdirectory(GetPotCount)
-add_subdirectory(FileLocationDatabase)

@@ -1,5 +1,0 @@
-#include "run_neutrinoselectionfilter_run3_dataON_cc0pinp.fcl"
-
-physics.filters.nuselection.AnalysisTools.zbdt: @local::BDTTool
-
-physics.filters.nuselection.IsFakeData: true

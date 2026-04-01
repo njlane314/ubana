@@ -1,1 +1,2 @@
 add_subdirectory(searchingforstrangeness)
+add_subdirectory(redk2nu)

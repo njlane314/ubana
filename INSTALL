@@ -111,6 +111,14 @@ If re-sourcing the product stack in the same shell reports an `mrb`
 version conflict such as `v4_05_01 vs v6_09_11`, prefer a fresh SL7
 container shell before repeating the setup sequence.
 
+In this mixed old-stack/new-MRB area, `mrbsetenv` may still print
+
+    DIAGNOSTICS: there are no packages in .../srcs
+
+even after `mrb uc` has populated `$TOP/srcs/CMakeLists.txt`.  The
+authoritative check is the build itself: if `buildtool` enters local
+`ubsim` and local `ubana`, the area is usable.
+
 Build from the analysis package checkout:
 
     cd "$TOP/srcs/ubana/ubana/searchingforstrangeness"

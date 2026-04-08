@@ -88,6 +88,12 @@ then the usual fix is to return to `$TOP/srcs` and rerun:
 
     mrb uc
 
+For this `ubana` + `ubsim` redeploy, `$TOP/srcs/CMakeLists.txt` should
+place `ubsim` before `ubana` in both the package block section and the
+`mrb_add_subdirectory(...)` section.  If the generated file lists
+`ubana` first, adjust the order before building so local `ubsim` is
+configured first.
+
 
 Build
 =====

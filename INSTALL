@@ -1,0 +1,130 @@
+ubana GPVM Install Notes
+========================
+
+This checkout is intended for the MicroBooNE mcc9 `e17:prof` workflow
+used to build and run `ubana/searchingforstrangeness` in a fresh MRB
+development area on the GPVMs.
+
+
+Fresh MRB Area
+==============
+
+Start from a clean GPVM shell, then enter the SL7 development container:
+
+    /cvmfs/uboone.opensciencegrid.org/bin/shell_apptainer.sh
+
+Inside the container, create and initialize a fresh MRB area:
+
+    source /cvmfs/uboone.opensciencegrid.org/products/setup
+    source /cvmfs/uboone.opensciencegrid.org/products/setup_uboone_mcc9.sh
+    setup mrb
+
+    export TOP=/exp/uboone/app/users/$USER/production/mcc9
+    mkdir -p "$TOP"
+    cd "$TOP"
+    mrb newDev -q e17:prof
+    source localProducts_*/setup
+
+
+Source Checkouts
+================
+
+Clone the forked repositories under `srcs/`:
+
+    cd "$TOP/srcs"
+    git clone https://github.com/njlane314/ubana.git
+    git clone https://github.com/njlane314/ubsim.git
+
+Initialize the `searchingforstrangeness` submodule recorded by `ubana`:
+
+    cd "$TOP/srcs/ubana"
+    git submodule sync --recursive
+    git submodule update --init --remote ubana/searchingforstrangeness
+
+To inspect the recorded submodule revision:
+
+    cd "$TOP/srcs/ubana/ubana/searchingforstrangeness"
+    git rev-parse --short HEAD
+
+
+Required Checks
+===============
+
+Before building, verify that the local `ubsim` checkout contains the
+old-flux PPFX calculators required by the EventWeight FHiCLs:
+
+    cd "$TOP/srcs/ubsim"
+    grep -R -n 'UBOLDPPFX\|UBOLDPPFXCV' ubsim/EventWeight/Calculators
+
+If that grep prints nothing, stop and fix the `ubsim` source before
+building. A local build without those calculators will fail at runtime
+when `ppfx_oldrw_cv` is requested.
+
+Update the top-level MRB package list after cloning by hand:
+
+    cd "$TOP/srcs"
+    mrb uc
+
+
+Build
+=====
+
+Re-establish the MRB environment from the top of the fresh area:
+
+    cd "$TOP"
+    source /cvmfs/uboone.opensciencegrid.org/products/setup
+    source /cvmfs/uboone.opensciencegrid.org/products/setup_uboone_mcc9.sh
+    setup mrb
+    source localProducts_*/setup
+    mrbsetenv
+
+Build from the analysis package checkout:
+
+    cd "$TOP/srcs/ubana/ubana/searchingforstrangeness"
+    source .build.sh
+
+The helper script builds the MRB area and refreshes the runtime tarball.
+
+
+Runtime Setup
+=============
+
+For local GPVM tests, use the package helper after a successful build:
+
+    cd "$TOP/srcs/ubana/ubana/searchingforstrangeness"
+    source .setup.sh
+
+That script sets up the mcc9 products, restores the MRB environment
+after `unsetup_all`, and prepends the local `ubana` and `ubsim`
+installed runtime paths before falling back to CVMFS.
+
+
+Local Smoke Test
+================
+
+Example local EventWeight test:
+
+    cd "$TOP/srcs/ubana/ubana/searchingforstrangeness"
+    SAM_DEF=prodgenie_numi_uboone_overlay_fhc_mcc9_run1_v28_v2_sample0 \
+    OUTPUT_BASE_DIR="$PWD/out" \
+    ./.local.sh dev/flux/run_stage_evtw_cv_dev.fcl 1
+
+If this fails, check first:
+
+  * `source .setup.sh` completed without MRB setup errors;
+  * the local `ubsim` checkout includes `UBOLDPPFX` and `UBOLDPPFXCV`;
+  * the `searchingforstrangeness` submodule is initialized at the
+    revision recorded by `ubana`.
+
+
+Batch Jobs
+==========
+
+Batch jobs use the tarball refreshed by `.build.sh`, so GPVM and job
+submission testing should always be done from the same rebuilt MRB area.
+
+After the local smoke test succeeds, submit only the EventWeight stage
+first:
+
+    project.py --xml xml/numi_reco2_run1_fhc_campaign.xml --stage beam_shard0_evtw --submit
+    project.py --xml xml/numi_reco2_run1_fhc_campaign.xml --stage beam_shard0_evtw --check

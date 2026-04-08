@@ -78,6 +78,16 @@ Update the top-level MRB package list after cloning by hand:
     cd "$TOP/srcs"
     mrb uc
 
+After the first successful `mrbsetenv`, run `mrb uc` once more from
+`$TOP/srcs` if needed so MRB can reorder the hand-added package blocks
+correctly.  If `mrbsetenv` reports
+
+    DIAGNOSTICS: there are no packages in .../srcs
+
+then the usual fix is to return to `$TOP/srcs` and rerun:
+
+    mrb uc
+
 
 Build
 =====
@@ -90,6 +100,10 @@ Re-establish the MRB environment from the top of the fresh area:
     setup mrb
     source localProducts_*/setup
     mrbsetenv
+
+If re-sourcing the product stack in the same shell reports an `mrb`
+version conflict such as `v4_05_01 vs v6_09_11`, prefer a fresh SL7
+container shell before repeating the setup sequence.
 
 Build from the analysis package checkout:
 

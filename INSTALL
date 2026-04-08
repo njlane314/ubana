@@ -35,6 +35,9 @@ Clone the forked repositories under `srcs/`:
     git clone https://github.com/njlane314/ubana.git
     git clone https://github.com/njlane314/ubsim.git
 
+The current `ubsim` fork `main` is pinned for the mcc9 stack and should
+declare `geant4reweight v01_00_03e`, matching `uboonecode v08_00_00_82`.
+
 Initialize the `searchingforstrangeness` submodule recorded by `ubana`:
 
     cd "$TOP/srcs/ubana"
@@ -59,6 +62,16 @@ old-flux PPFX calculators required by the EventWeight FHiCLs:
 If that grep prints nothing, stop and fix the `ubsim` source before
 building. A local build without those calculators will fail at runtime
 when `ppfx_oldrw_cv` is requested.
+
+Also verify that the local `ubsim` checkout is using the mcc9-compatible
+geant4reweight dependency:
+
+    cd "$TOP/srcs/ubsim"
+    grep -n 'geant4reweight' ups/product_deps
+
+The expected line is:
+
+    geant4reweight        v01_00_03e
 
 Update the top-level MRB package list after cloning by hand:
 
